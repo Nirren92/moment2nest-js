@@ -67,6 +67,6 @@ jobs:
         with:
           app-name: 'dt209moment2'
           slot-name: 'Production'
-          package: ./release.zip
+          package: ./dist
 
           

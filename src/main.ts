@@ -8,7 +8,8 @@ async function bootstrap() {
 
   app.enableCors();
 
-
+  console.log('MongoDB URI:', process.env.MONGO_URI);
+  
   await app.listen(process.env.PORT ?? 8080);
 }
 bootstrap();

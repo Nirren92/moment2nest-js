@@ -8,7 +8,7 @@ async function bootstrap() {
 
   app.enableCors();
 
-  console.log('MongoDB URI:', "mongodb+srv://nibor:MongoDB1@moment1dt209g.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000");
+  console.log('MongoDB URI:', process.env.AZURE_URL);
 
   await app.listen(process.env.PORT ?? 8080);
 }

@@ -8,8 +8,8 @@ async function bootstrap() {
 
   app.enableCors();
 
-  console.log('MongoDB URI:', process.env.AZURE_URL);
-  const port = process.env.PORT || 8080; 
+
+  const port = process.env.PORT || 3000;
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
 }

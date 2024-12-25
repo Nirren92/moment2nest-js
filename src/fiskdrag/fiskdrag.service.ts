@@ -1,6 +1,6 @@
 
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FiskDrag } from './schemas/fiskdrag.schemas';
 import { CreateFiskDragDto } from './dto/create-fiskdrag';
@@ -14,18 +14,24 @@ export class FiskDragService {
 
   //Skapar ett nytt obejekt.ville få det att fungera med att ha unikt på ett fält i mongodb schema men fick inte det att fungera. vet inte om det azure eller jag så jag löser det genom en "manuell kontroll"
   async create(createFiskdragDto: CreateFiskDragDto): Promise<FiskDrag> {
-    
-    const existingFiskDrag = await this.fiskdragModel.findOne({
-      artikelnummer: createFiskdragDto.artikelnummer,
-    });
+    try
+    {    
+      const existingFiskDrag = await this.fiskdragModel.findOne({
+        artikelnummer: createFiskdragDto.artikelnummer,
+      });
 
-    if(existingFiskDrag)
+      if(existingFiskDrag)
+      {
+        throw new HttpException("Artikelnummer är inte unikt. finns redan.",HttpStatus.BAD_REQUEST)
+      }
+
+      const createFiskDrag = new this.fiskdragModel(createFiskdragDto);
+      return createFiskDrag.save();
+    } 
+    catch
     {
-      throw new Error("Artikelnummer är inte unikt. finns redan.")
+      throw new HttpException("nåt gick fel i skapandet",HttpStatus.BAD_REQUEST);
     }
-
-    const createFiskDrag = new this.fiskdragModel(createFiskdragDto);
-    return createFiskDrag.save();
   }
 
   // retunerar alla objekt som finns i mongodb databasen
@@ -35,6 +41,16 @@ export class FiskDragService {
 
   // Söker reda på ID och uppdaterar dens data. 
   async update(id: string, UpdateFiskDragDto: UpdateFiskDragDto): Promise<FiskDrag> {
+    
+    const existingFiskDrag = await this.fiskdragModel.findOne({
+      artikelnummer: UpdateFiskDragDto.artikelnummer,
+    });
+
+    if(existingFiskDrag)
+    {
+      throw new Error("Artikelnummer är inte unikt. finns redan.")
+    }
+    
     return this.fiskdragModel
     .findByIdAndUpdate({ _id: id }, UpdateFiskDragDto, { new: true })
     .exec();

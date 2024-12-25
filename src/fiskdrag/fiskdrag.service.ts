@@ -24,7 +24,7 @@ export class FiskDragService {
   }
 
   // Söker reda på ID och uppdaterar dens data. 
-  async update(id: string): Promise<FiskDrag> {
+  async update(id: string, UpdateFiskDragDto: UpdateFiskDragDto): Promise<FiskDrag> {
     return this.fiskdragModel
     .findByIdAndUpdate({ _id: id }, UpdateFiskDragDto, { new: true })
     .exec();

@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { FiskDragService } from './fiskdrag.service';
 import { CreateFiskDragDto } from './dto/create-fiskdrag';
 import { FiskDrag } from './schemas/fiskdrag.schemas';
+import { UpdateFiskDragDto } from './dto/update-fiskdrag';
 
 @Controller('fiskdrag')
 export class FiskDragController {
@@ -15,5 +16,15 @@ export class FiskDragController {
   @Get()
   async findAll(): Promise<FiskDrag[]> {
     return this.fiskDragService.findAll();
+  }
+
+  @Post(':id')
+  async update(@Param('id') id: string, @Body() UpdateFiskDragDto: UpdateFiskDragDto) {
+    return this.fiskDragService.update(id, UpdateFiskDragDto);
+  }
+
+   @Delete(':id')
+  async delete(@Param('id') id: string) {
+    return this.fiskDragService.delete(id);
   }
 }

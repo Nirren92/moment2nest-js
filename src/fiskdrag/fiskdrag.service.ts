@@ -33,17 +33,7 @@ export class FiskDragService {
   // Söker reda på ID och uppdaterar dens data. 
   async update(id: string, UpdateFiskDragDto: UpdateFiskDragDto): Promise<FiskDrag> {
     try
-    {
-      
-      const existingFiskDrag = await this.fiskdragModel.findOne({
-        artikelnummer: UpdateFiskDragDto.artikelnummer,
-      });
-
-      if(existingFiskDrag)
-      {
-        throw new Error("Artikelnummer är inte unikt. finns redan.")
-      }
-      
+    {     
       return this.fiskdragModel
       .findByIdAndUpdate({ _id: id }, UpdateFiskDragDto, { new: true })
       .exec();

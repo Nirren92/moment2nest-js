@@ -16,10 +16,12 @@ export class FiskDragService {
   async create(createFiskdragDto: CreateFiskDragDto): Promise<FiskDrag> {
     try
     {    
+      //kontrollerar om artikelnummer finns
       const existingFiskDrag = await this.fiskdragModel.findOne({
         artikelnummer: createFiskdragDto.artikelnummer,
       });
 
+      //den fanns. retunerar felkod. 
       if(existingFiskDrag)
       {
         throw new HttpException("Artikelnummer är inte unikt. finns redan.",HttpStatus.BAD_REQUEST)
@@ -28,7 +30,7 @@ export class FiskDragService {
       const createFiskDrag = new this.fiskdragModel(createFiskdragDto);
       return createFiskDrag.save();
     } 
-    catch
+    catch(error)
     {
       throw new HttpException("nåt gick fel i skapandet",HttpStatus.BAD_REQUEST);
     }
@@ -41,19 +43,27 @@ export class FiskDragService {
 
   // Söker reda på ID och uppdaterar dens data. 
   async update(id: string, UpdateFiskDragDto: UpdateFiskDragDto): Promise<FiskDrag> {
-    
-    const existingFiskDrag = await this.fiskdragModel.findOne({
-      artikelnummer: UpdateFiskDragDto.artikelnummer,
-    });
-
-    if(existingFiskDrag)
+    try
     {
-      throw new Error("Artikelnummer är inte unikt. finns redan.")
-    }
+      
+      const existingFiskDrag = await this.fiskdragModel.findOne({
+        artikelnummer: UpdateFiskDragDto.artikelnummer,
+      });
+
+      if(existingFiskDrag)
+      {
+        throw new Error("Artikelnummer är inte unikt. finns redan.")
+      }
+      
+      return this.fiskdragModel
+      .findByIdAndUpdate({ _id: id }, UpdateFiskDragDto, { new: true })
+      .exec();
     
-    return this.fiskdragModel
-    .findByIdAndUpdate({ _id: id }, UpdateFiskDragDto, { new: true })
-    .exec();
+    }
+    catch(error)
+    {
+
+    }
   }
 
   // kontrollerar mot ID att det finns. det som kontrolleras är det interna som mongodb skapar. finns det så tas det bort. 

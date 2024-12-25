@@ -12,28 +12,16 @@ import { UpdateFiskDragDto } from './dto/update-fiskdrag';
 export class FiskDragService {
   constructor(@InjectModel(FiskDrag.name) private fiskdragModel: Model<FiskDrag>) {}
 
-  //Skapar ett nytt obejekt.ville få det att fungera med att ha unikt på ett fält i mongodb schema men fick inte det att fungera. vet inte om det azure eller jag så jag löser det genom en "manuell kontroll"
+  //Skapar ett nytt obejekt.
   async create(createFiskdragDto: CreateFiskDragDto): Promise<FiskDrag> {
     try
     {    
-      //kontrollerar om artikelnummer finns
-      const existingFiskDrag = await this.fiskdragModel.findOne({
-        artikelnummer: createFiskdragDto.artikelnummer,
-      });
-
-      //den fanns. retunerar felkod. 
-      if(existingFiskDrag)
-      {
-        throw new HttpException("Artikelnummer är inte unikt. finns redan.",HttpStatus.BAD_REQUEST)
-      }
-
       const createFiskDrag = new this.fiskdragModel(createFiskdragDto);
       return createFiskDrag.save();
     } 
     catch(error)
     {
       console.error("nåt gick fel vid skapandet.",error);
-      throw new HttpException("nåt gick fel i skapandet",HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

@@ -33,7 +33,7 @@ export class FiskDragService {
     catch(error)
     {
       console.error("nåt gick fel vid skapandet.",error);
-      throw new HttpException("nåt gick fel i skapandet",HttpStatus.INTERNAL_SERVER_ERROR);
+      //throw new HttpException("nåt gick fel i skapandet",HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -63,7 +63,7 @@ export class FiskDragService {
     }
     catch(error)
     {
-
+      console.error("nåt gick fel vid uppdaterande.",error);
     }
   }
 

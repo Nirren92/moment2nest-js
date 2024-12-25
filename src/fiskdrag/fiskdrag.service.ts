@@ -12,8 +12,18 @@ import { UpdateFiskDragDto } from './dto/update-fiskdrag';
 export class FiskDragService {
   constructor(@InjectModel(FiskDrag.name) private fiskdragModel: Model<FiskDrag>) {}
 
-  //Skapar ett nytt obejekt.
+  //Skapar ett nytt obejekt.ville få det att fungera med att ha unikt på ett fält i mongodb schema men fick inte det att fungera. vet inte om det azure eller jag så jag löser det genom en "manuell kontroll"
   async create(createFiskdragDto: CreateFiskDragDto): Promise<FiskDrag> {
+    
+    const existingFiskDrag = await this.fiskdragModel.findOne({
+      artikelnummer: createFiskdragDto.artikelnummer,
+    });
+
+    if(existingFiskDrag)
+    {
+      throw new Error("Artikelnummer är inte unikt. finns redan.")
+    }
+
     const createFiskDrag = new this.fiskdragModel(createFiskdragDto);
     return createFiskDrag.save();
   }

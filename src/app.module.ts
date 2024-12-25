@@ -7,7 +7,7 @@ import { FiskDrag } from './fiskdrag/schemas/fiskdrag.schemas';
 import { FiskDragModule } from './fiskdrag/fiskdrag.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(),MongooseModule.forRoot("mongodb+srv://nibor:MongoDB1@moment1dt209g.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"),FiskDragModule],
+  imports: [ConfigModule.forRoot(),MongooseModule.forRoot("mongodb+srv://nirren92:g6qmlQCUwQfAO4bR@cluster0.amxvj.mongodb.net/"),FiskDragModule],
   controllers: [AppController],
   providers: [AppService],
 })

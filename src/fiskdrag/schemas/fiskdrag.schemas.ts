@@ -6,7 +6,7 @@ export type FiskDragDocument = HydratedDocument<FiskDrag>;
 @Schema()
 export class FiskDrag {
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   artikelnummer: string;
 
   @Prop()

@@ -32,6 +32,8 @@ export class FiskDragService {
     } 
     catch(error)
     {
+      console.error('Fel vid skapandet av fiskedrag:', error);
+      
       throw new HttpException("nåt gick fel i skapandet",HttpStatus.BAD_REQUEST);
     }
   }

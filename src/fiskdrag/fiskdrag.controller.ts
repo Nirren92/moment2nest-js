@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { FiskDragService } from './fiskdrag.service';
 import { CreateFiskDragDto } from './dto/create-fiskdrag';
 import { FiskDrag } from './schemas/fiskdrag.schemas';
@@ -18,7 +18,7 @@ export class FiskDragController {
     return this.fiskDragService.findAll();
   }
 
-  @Post(':id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() UpdateFiskDragDto: UpdateFiskDragDto) {
     return this.fiskDragService.update(id, UpdateFiskDragDto);
   }

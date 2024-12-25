@@ -21,11 +21,7 @@ export class FiskDragService {
         artikelnummer: createFiskdragDto.artikelnummer,
       });
 
-      //den fanns. retunerar felkod. 
-      if(existingFiskDrag)
-      {
-        throw new HttpException("Artikelnummer är inte unikt. finns redan.",HttpStatus.BAD_REQUEST)
-      }
+
 
       const createFiskDrag = new this.fiskdragModel(createFiskdragDto);
       return createFiskDrag.save();

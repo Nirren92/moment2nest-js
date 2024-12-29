@@ -10,6 +10,7 @@ export class FiskDragController {
 
   @Post()
   async create(@Body() createFiskDragDto: CreateFiskDragDto): Promise<FiskDrag> {
+    console.log("får in data",createFiskDragDto);
     return this.fiskDragService.create(createFiskDragDto);
   }
 

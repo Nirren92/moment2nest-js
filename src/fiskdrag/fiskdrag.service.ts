@@ -48,10 +48,11 @@ export class FiskDragService {
         throw new HttpException('ingen korrekt mongodb _id', HttpStatus.BAD_REQUEST);
       }
       
-      // kontrollerar så inget annat objekt redan har ifall artikelnummer ska bytas. 
-      if (UpdateFiskDragDto.artikelnummer) {
+      // kontrollerar så inget annat objekt redan har ifall artikelnummer ska bytas. detta görs endast om artikelnummer skickas med.
+      if (UpdateFiskDragDto.artikelnummer) 
+      {
         const existingFiskDrag = await this.fiskdragModel.findOne({artikelnummer:UpdateFiskDragDto.artikelnummer, _id:{$ne:id}}).exec();
-  
+        //kontrollerar om det fanns. finns det så kan vi inte uppdatera det berört Id med det nya artikelnummeret. 
         if (existingFiskDrag) {
           throw new HttpException(
             `artikelnummmer är redan använt`,
@@ -71,17 +72,37 @@ export class FiskDragService {
     }
     catch(error)
     {
-      console.error("nåt gick fel vid uppdaterande.",error);
+      
       throw error;
     }
   }
 
   // kontrollerar mot ID att det finns. det som kontrolleras är det interna som mongodb skapar. finns det så tas det bort. 
-  async delete(id: string): Promise<FiskDrag> {
-    const deleteFiskdrag = await this.fiskdragModel
-      .findByIdAndDelete({ _id: id })
-      .exec();
-    return deleteFiskdrag;
+  async delete(id: string): Promise<FiskDrag> 
+  {
+    try
+    {
+      //kontrollerar att det är ett korrekt ID
+      if (!Types.ObjectId.isValid(id)) {
+        throw new HttpException('ingen korrekt mongodb _id', HttpStatus.BAD_REQUEST);
+      }
+
+      //raderar id
+      const deleteFiskdrag = await this.fiskdragModel.findByIdAndDelete({_id:id }).exec();
+
+      //kontrollerar att det gått bra. har det inte gått så finns inte id
+      if(!deleteFiskdrag)
+        {
+          throw new HttpException('id finns inte',HttpStatus.BAD_REQUEST);
+        }
+      return deleteFiskdrag;
+
+    }
+    catch(error)
+    {
+      
+      throw error;
+    }
   }
 
 

@@ -19,7 +19,7 @@ export class FiskDragService {
       const checkFiskeDrag = await this.fiskdragModel.findOne({artikelnummer:createFiskdragDto.artikelnummer}).exec();
       if(checkFiskeDrag)
       {
-        throw new HttpException('artikelnummer finns readn',HttpStatus.BAD_REQUEST);
+        throw new HttpException('artikelnummer finns redan',HttpStatus.BAD_REQUEST);
       }
 
       //draget finns inte så detta skickas in i databasen-

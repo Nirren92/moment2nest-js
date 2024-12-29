@@ -1,10 +1,8 @@
-
 import { Model, Types } from 'mongoose';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FiskDrag } from './schemas/fiskdrag.schemas';
 import { CreateFiskDragDto } from './dto/create-fiskdrag';
-import { promises } from 'dns';
 import { UpdateFiskDragDto } from './dto/update-fiskdrag';
 
 

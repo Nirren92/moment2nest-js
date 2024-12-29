@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNumber, Length, Min, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, IsNumber, Length, Min, IsNotEmpty,  IsBoolean } from 'class-validator';
 
 export class CreateFiskDragDto {
   @IsString()
@@ -16,4 +16,9 @@ export class CreateFiskDragDto {
   @IsString()
   @IsOptional()
   readonly typ: string;
+
+@IsBoolean()
+@IsOptional()
+readonly own:boolean;
+
   }

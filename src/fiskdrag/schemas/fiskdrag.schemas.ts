@@ -17,6 +17,9 @@ export class FiskDrag {
 
   @Prop()
   typ: string;
+
+  @Prop()
+  own: string;
 }
 
 export const FiskDragSchema = SchemaFactory.createForClass(FiskDrag);

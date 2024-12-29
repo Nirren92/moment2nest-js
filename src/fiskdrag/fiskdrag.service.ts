@@ -1,5 +1,5 @@
 
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FiskDrag } from './schemas/fiskdrag.schemas';
@@ -16,12 +16,22 @@ export class FiskDragService {
   async create(createFiskdragDto: CreateFiskDragDto): Promise<FiskDrag> {
     try
     {    
+
+      //kontrollerar så inte det finns redan
+      const checkFiskeDrag = await this.fiskdragModel.findOne({artikelnummer:createFiskdragDto.artikelnummer}).exec();
+      if(checkFiskeDrag)
+      {
+        throw new HttpException('artikelnummer finns readn',HttpStatus.BAD_REQUEST);
+      }
+
+      //draget finns inte så detta skickas in i databasen-
       const createFiskDrag = new this.fiskdragModel(createFiskdragDto);
       return createFiskDrag.save();
     } 
     catch(error)
     {
-      console.error("nåt gick fel vid skapandet.",error);
+      console.error('Fel vid skapandet av FiskDrag:', error);
+      throw error;
     }
   }
 
@@ -34,14 +44,35 @@ export class FiskDragService {
   async update(id: string, UpdateFiskDragDto: UpdateFiskDragDto): Promise<FiskDrag> {
     try
     {
-      return this.fiskdragModel
-      .findByIdAndUpdate({ _id: id }, UpdateFiskDragDto, { new: true })
-      .exec();
-    
+      if (!Types.ObjectId.isValid(id)) {
+        throw new HttpException('ingen korrekt mongodb _id', HttpStatus.BAD_REQUEST);
+      }
+      
+      // kontrollerar så inget annat objekt redan har ifall artikelnummer ska bytas. 
+      if (UpdateFiskDragDto.artikelnummer) {
+        const existingFiskDrag = await this.fiskdragModel.findOne({artikelnummer:UpdateFiskDragDto.artikelnummer, _id:{$ne:id}}).exec();
+  
+        if (existingFiskDrag) {
+          throw new HttpException(
+            `artikelnummmer är redan använt`,
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      }
+
+      const updateFiskdrag = await this.fiskdragModel.findByIdAndUpdate({_id:id},UpdateFiskDragDto,{new:true}).exec();
+
+      if(!updateFiskdrag)
+        {
+          throw new HttpException('id finns inte',HttpStatus.BAD_REQUEST);
+        }
+    return updateFiskdrag;
+
     }
     catch(error)
     {
       console.error("nåt gick fel vid uppdaterande.",error);
+      throw error;
     }
   }
 
